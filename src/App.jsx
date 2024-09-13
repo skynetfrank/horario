@@ -50,7 +50,6 @@ export default function App() {
         );
         const results = await respuesta.json();
         const convert = results.map((item) => {
-          console.log("item", item);
           const obj = {
             id: item._id,
             title: item.title,
@@ -70,62 +69,124 @@ export default function App() {
   const handleSelectSlot = useCallback(
     ({ start, end }) => {
       Swal.fire({
-        title: "Apertura de Tienda",
-        input: "text",
+        title: "Asignar Horarios a Empleados",
+        showDenyButton: true,
         showCancelButton: true,
-        confirmButtonText: "Guardar",
-        cancelButtonText: "Cancelar",
-      }).then((resultado) => {
-        if (resultado.value) {
-          const title = resultado.value;
-          const data = {
-            title: "Apertura: " + title,
-            start,
-            end,
-          };
-          setEventos((prev) => [...prev, { start, end, title }]);
-          fetch(
-            "https://us-east-1.aws.data.mongodb-api.com/app/application-0-fjddd/endpoint/agregarevento",
-            {
-              method: "POST",
-              body: JSON.stringify(data),
-              headers: { "Content-type": "application/json; charset=UTF-8" },
-            }
-          )
-            .then((response) => {
-              Swal.fire({
-                title: "Cierre de Tienda",
-                input: "text",
-                showCancelButton: true,
-                confirmButtonText: "Guardar",
-                cancelButtonText: "Cancelar",
-              }).then((resultado) => {
-                if (resultado.value) {
-                  const title = resultado.value;
-                  const data = {
-                    title: "Cierre: " + title,
-                    start,
-                    end,
-                  };
-                  setEventos((prev) => [...prev, { start, end, title }]);
-                  fetch(
-                    "https://us-east-1.aws.data.mongodb-api.com/app/application-0-fjddd/endpoint/agregarevento",
-                    {
-                      method: "POST",
-                      body: JSON.stringify(data),
-                      headers: {
-                        "Content-type": "application/json; charset=UTF-8",
-                      },
-                    }
-                  )
-                    .then((response) => window.location.reload())
-                    .then((json) => window.location.reload())
-                    .catch((err) => console.log(err));
+        confirmButtonText: "APERTURA",
+        confirmButtonColor: "blue",
+        denyButtonText: "CIERRE",
+        denyButtonColor: "blue",
+        cancelButtonText: "TODO EL DIA",
+        cancelButtonColor: "black",
+      }).then((result) => {
+        console.log("result", result);
+        if (result.dismiss == "backdrop") {
+          return;
+        }
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Apertura de Tienda",
+            input: "text",
+            inputPlaceholder: "Ingrese los Nombres",
+            showCancelButton: true,
+            confirmButtonText: "Guardar",
+            cancelButtonText: "Cancelar",
+          }).then((resultado) => {
+            if (resultado.value) {
+              const title = resultado.value;
+              const data = {
+                title: "Apertura: " + title,
+                start,
+                end,
+              };
+              setEventos((prev) => [...prev, { start, end, title }]);
+              fetch(
+                "https://us-east-1.aws.data.mongodb-api.com/app/application-0-fjddd/endpoint/agregarevento",
+                {
+                  method: "POST",
+                  body: JSON.stringify(data),
+                  headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                  },
                 }
-              });
-            })
-            .then((json) => console.log(json))
-            .catch((err) => console.log(err));
+              )
+                .then((response) => console.log("apertura"))
+                .then((json) => console.log(json))
+                .catch((err) => console.log(err));
+            }
+          });
+        }
+
+        if (result.isDenied) {
+          Swal.fire({
+            title: "Cierre de Tienda",
+            input: "text",
+            inputPlaceholder: "Ingrese los Nombres",
+            showCancelButton: true,
+            confirmButtonText: "Guardar",
+            cancelButtonText: "Cancelar",
+          }).then((resultado) => {
+            console.log("resultado", resultado);
+
+            if (resultado.value) {
+              const title = resultado.value;
+              const data = {
+                title: "Cierre: " + title,
+                start,
+                end,
+              };
+              setEventos((prev) => [...prev, { start, end, title }]);
+              fetch(
+                "https://us-east-1.aws.data.mongodb-api.com/app/application-0-fjddd/endpoint/agregarevento",
+                {
+                  method: "POST",
+                  body: JSON.stringify(data),
+                  headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                  },
+                }
+              )
+                .then((response) => window.location.reload())
+                .then((json) => window.location.reload())
+                .catch((err) => console.log(err));
+            }
+          });
+        }
+
+        if (result.isDismissed) {
+          Swal.fire({
+            title: "Todo El Dia",
+            input: "text",
+            inputPlaceholder: "Ingrese los nombres",
+            showCancelButton: true,
+            confirmButtonText: "Guardar",
+            cancelButtonText: "Cancelar",
+          }).then((resultado) => {
+            console.log("resultado", resultado);
+
+            if (resultado.value) {
+              const title = resultado.value;
+              const data = {
+                title: "Todo el Dia: " + title,
+                start,
+                end,
+              };
+              setEventos((prev) => [...prev, { start, end, title }]);
+              fetch(
+                "https://us-east-1.aws.data.mongodb-api.com/app/application-0-fjddd/endpoint/agregarevento",
+                {
+                  method: "POST",
+                  body: JSON.stringify(data),
+                  headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                  },
+                }
+              )
+                .then((response) => window.location.reload())
+                .then((json) => window.location.reload())
+                .catch((err) => console.log(err));
+            }
+          });
         }
       });
     },
@@ -178,11 +239,15 @@ export default function App() {
         <p>Horario del Personal Tienda Chacao</p>
         <div className="flx">
           <h2>Apertura:</h2>
-          <span>8:30 a.m. hasta 4:30 p.m. </span>
+          <span className="apertura">8:30 a.m. hasta 4:30 p.m. </span>
         </div>
         <div className="flx">
-          <h2>Cierre:</h2>
+          <h2>Cierre :</h2>
           <span className="cierre">1:00 p.m. hasta 9:00 p.m. </span>
+        </div>
+        <div className="flx">
+          <h2>Todo el Dia:</h2>
+          <span className="allday">12:00 p.m. hasta 8:00 p.m. </span>
         </div>
       </div>
 

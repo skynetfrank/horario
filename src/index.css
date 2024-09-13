@@ -93,12 +93,24 @@ p {
 }
 
 h2{
-  font-size: 1.8rem;
+  font-size: 1.4rem;
 }
 
 .cierre{
-  margin-left: 2.3rem;
+  margin-left: 3.5rem;
 }
+
+
+.apertura{
+  margin-left: 2rem;
+}
+
+
+.allday{
+  margin-left: 0.3rem;
+}
+
+
 
 .calendario-container span{
   font-weight: bold;
