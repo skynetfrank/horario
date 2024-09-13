@@ -1,0 +1,129 @@
+.calendario-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rbc-event {
+  background-color: transparent;
+  color: black;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.rbc-event.rbc-selected {
+  background-color: transparent;
+}
+
+.rbc-today {
+  background-color: transparent;
+  border: 1px solid black;
+  border-left: 1px solid black !important;
+}
+
+.print-btn {
+  position: absolute;
+  top: 1rem;
+  left: 1.5rem;
+  padding: 3px 5px;
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+}
+
+.print-btn svg {
+  font-size: 1.6rem;
+  pointer-events: all;
+  cursor: pointer;
+  color: grey;
+}
+
+.print-btn svg:hover {
+  color: black;
+}
+
+h2,
+p {
+  margin: 0;
+  text-align: center;
+}
+
+.rbc-toolbar {
+  margin-bottom: 0;
+}
+
+.rbc-toolbar .rbc-toolbar-label {
+  font-size: 2rem;
+}
+
+.rbc-off-range-bg {
+  background: rgb(243, 243, 243);
+}
+
+.rbc-month-header {
+  background-color: rgb(0, 245, 245);
+}
+
+.rbc-button-link {
+  font-weight: bold;
+  border: 1px solid blue;
+  padding: 0px 2px;
+}
+
+.rbc-event {
+  cursor: not-allowed;
+}
+
+.rbc-time-content {
+  display: none;
+}
+
+.rbc-time-header {
+  margin-right: 0;
+}
+.rbc-button-link:hover {
+  color: blue;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.flx {
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+
+h2{
+  font-size: 1.8rem;
+}
+
+.cierre{
+  margin-left: 2.3rem;
+}
+
+.calendario-container span{
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+
+@media (max-width: 575px) {
+  .print-btn {
+    left: 0px;
+  }
+}
+
+@media print {
+  @page {
+    margin: 5px;
+  }
+  html,
+  body {
+    height: 98vh; /* Use 100% here to support printing more than a single page*/
+    padding: 0 !important;
+    overflow: hidden;
+  }
+  header,
+  footer,
+  .print-btn {
+    display: none !important;
+  }
+}
